@@ -18,4 +18,8 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
 
     @Query("SELECT l FROM Livro l JOIN FETCH l.autores WHERE l.idioma = :idioma")
     List<Livro> listarLivrosPorIdioma(@Param("idioma") String idioma);
+
+    //selecionar todos os livros de um determinado autor
+    @Query("SELECT l FROM Livro l JOIN FETCH l.autores a WHERE a.nome = :nome")
+    List<Livro> listarLivrosPorAutor(@Param("nome") String nome);
 }

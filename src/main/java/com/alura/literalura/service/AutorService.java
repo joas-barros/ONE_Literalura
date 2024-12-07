@@ -16,6 +16,9 @@ public class AutorService {
     @Autowired
     private AutorRepository autorRepository;
 
+    @Autowired
+    private LivroService livroService;
+
     @Transactional(readOnly = true)
     public List<String> listarAutores() {
         List<Autor> autores = autorRepository.findAll();
@@ -49,5 +52,23 @@ public class AutorService {
                             "Ano de falecimento: " + (autor.getAnoFalecimento() != null ? autor.getAnoFalecimento() : "N/A") + "\n" +
                             "Livros: [" + livros + "]\n";
                 }).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public String buscarAutorPeloNome(String autor) {
+        Autor autorEncontrado = autorRepository.findByNomeIgnoreCase(autor).orElse(null);
+
+        if (autorEncontrado == null) {
+            return "Autor não encontrado";
+        }
+
+        String livros = autorEncontrado.getLivros().stream()
+                .map(Livro::getTitulo)
+                .collect(Collectors.joining(", "));
+
+        return "Autor: " + autorEncontrado.getNome() + "\n" +
+                "Ano de nascimento: " + autorEncontrado.getAnoNascimento() + "\n" +
+                "Ano de falecimento: " + (autorEncontrado.getAnoFalecimento() != null ? autorEncontrado.getAnoFalecimento() : "N/A") + "\n" +
+                "Livros: [" + livros + "]\n";
     }
 }

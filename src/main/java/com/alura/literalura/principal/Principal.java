@@ -2,7 +2,6 @@ package com.alura.literalura.principal;
 
 import com.alura.literalura.model.DadosGutendex;
 import com.alura.literalura.model.DadosLivro;
-import com.alura.literalura.model.Livro;
 import com.alura.literalura.service.AutorService;
 import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConverterDados;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 @Component
@@ -39,6 +39,7 @@ public class Principal {
                     3- listar autores registrados
                     4- listar autores vivos em um determinado ano
                     5- listar livros em um determinado idioma
+                    6 - buscar autor pelo nome
                     0- sair                                 
                     ----------------------------
                     """;
@@ -54,10 +55,21 @@ public class Principal {
                 case 4 -> listarAutoresVivosEmUmDeterminadoAno();
                 case 5 -> listarLivrosEmUmDeterminadoIdioma();
                 case 0 -> System.out.println("Saindo...");
+                case 6 -> buscarAutorPeloNome();
                 default -> System.out.println("Opção inválida");
             }
         }
 
+    }
+
+    private void buscarAutorPeloNome() {
+        System.out.println("Digite o nome do autor que deseja buscar: ");
+        String autor = scanner.nextLine();
+
+        // buscar autor pelo nome no banco de dados
+        String autorEncontrado = autorService.buscarAutorPeloNome(autor);
+
+        System.out.println(Objects.requireNonNullElse(autorEncontrado, "Autor não encontrado"));
     }
 
     private void listarLivrosEmUmDeterminadoIdioma() {
