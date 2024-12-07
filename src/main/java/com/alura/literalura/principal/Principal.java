@@ -40,6 +40,7 @@ public class Principal {
                     4- listar autores vivos em um determinado ano
                     5- listar livros em um determinado idioma
                     6 - buscar autor pelo nome
+                    7 - Top 10 livros mais baixados
                     0- sair                                 
                     ----------------------------
                     """;
@@ -56,10 +57,21 @@ public class Principal {
                 case 5 -> listarLivrosEmUmDeterminadoIdioma();
                 case 0 -> System.out.println("Saindo...");
                 case 6 -> buscarAutorPeloNome();
+                case 7 -> listarLivrosMaisBaixados();
                 default -> System.out.println("Opção inválida");
             }
         }
 
+    }
+
+    private void listarLivrosMaisBaixados() {
+        List<String> livrosMaisBaixados = livroService.listarTop10LivrosMaisBaixados();
+
+        if (livrosMaisBaixados.isEmpty()) {
+            System.out.println("Nenhum livro encontrado");
+        } else {
+            livrosMaisBaixados.forEach(System.out::println);
+        }
     }
 
     private void buscarAutorPeloNome() {

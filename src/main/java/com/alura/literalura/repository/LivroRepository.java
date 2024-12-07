@@ -22,4 +22,7 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
     //selecionar todos os livros de um determinado autor
     @Query("SELECT l FROM Livro l JOIN FETCH l.autores a WHERE a.nome = :nome")
     List<Livro> listarLivrosPorAutor(@Param("nome") String nome);
+
+    //selecionar os 10 livros mais baixados com derived query
+    List<Livro> findTop10ByOrderByDownloadsDesc();
 }

@@ -93,4 +93,13 @@ public class LivroService {
                     "--------------------------------------";
         }).collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<String> listarTop10LivrosMaisBaixados() {
+        List<Livro> livros = livroRepository.findTop10ByOrderByDownloadsDesc();
+
+        // Listar somente o titulo e o número de downloads
+        return livros.stream().map(livro -> "Título: " + livro.getTitulo() + " - Downloads: " + livro.getDownloads())
+                .collect(Collectors.toList());
+    }
 }
