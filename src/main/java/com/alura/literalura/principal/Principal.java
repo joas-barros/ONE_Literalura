@@ -4,8 +4,11 @@ import com.alura.literalura.model.DadosGutendex;
 import com.alura.literalura.model.DadosLivro;
 import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConverterDados;
+import com.alura.literalura.service.LivroService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Scanner;
 
 @Component
@@ -13,6 +16,9 @@ public class Principal {
     Scanner scanner = new Scanner(System.in);
     ConsumoApi consumoApi = new ConsumoApi();
     ConverterDados converterDados = new ConverterDados();
+
+    @Autowired
+    private LivroService livroService;
 
     private final String ENDERECO = "https://gutendex.com/books/?search=";
 
@@ -60,6 +66,13 @@ public class Principal {
     }
 
     private void listarLivrosRegistrados() {
+        List<String> livrosRegistrados = livroService.listarLivros();
+
+        if (livrosRegistrados.isEmpty()) {
+            System.out.println("Nenhum livro cadastrado");
+        } else {
+            livrosRegistrados.forEach(System.out::println);
+        }
     }
 
     private void buscarLivroPeloTitulo() {
@@ -68,6 +81,20 @@ public class Principal {
 
         String dados = consumoApi.obterDados(ENDERECO + livro.replace(" ", "%20"));
         DadosGutendex dadosGutendex = converterDados.obterDados(dados, DadosGutendex.class);
-        dadosGutendex.results().forEach(System.out::println);
+
+        if (dadosGutendex.results() != null && !dadosGutendex.results().isEmpty()) {
+            for (DadosLivro dadosLivro : dadosGutendex.results()) {
+                System.out.println(dadosLivro);
+
+                if (livroService.buscarLivroPeloTitulo(dadosLivro.title()).isPresent()) {
+                    System.out.println("Livro já cadastrado");
+                } else {
+                    livroService.salvarLivro(dadosLivro);
+                    System.out.println("Livro cadastrado com sucesso");
+                }
+            }
+        } else {
+            System.out.println("Livro não encontrado");
+        }
     }
 }

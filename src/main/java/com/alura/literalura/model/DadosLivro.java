@@ -18,7 +18,8 @@ public record DadosLivro(
 
         String autores = authors.stream()
                 .map(DadosAutor::nome)
-                .reduce("", (nome1, nome2) -> nome1 + ", " + nome2);
+                .reduce((a, b) -> a + ", " + b)
+                .orElse("Unknown");
 
         return "-------------- Livro ----------------\n" +
                 "Titulo: " + title + "\n" +
