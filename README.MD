@@ -53,8 +53,8 @@ spring.jpa.hibernate.ddl-auto=update
 1. Clone este repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/literalura.git
-cd literalura
+git clone git@github.com:joas-barros/ONE_Literalura.git
+cd ONE_Literalura
 ```
 2. Compile o projeto:
 
