@@ -102,4 +102,9 @@ public class LivroService {
         return livros.stream().map(livro -> "Título: " + livro.getTitulo() + " - Downloads: " + livro.getDownloads())
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public  List<Livro> buscarTodosLivros() {
+        return livroRepository.findAll();
+    }
 }

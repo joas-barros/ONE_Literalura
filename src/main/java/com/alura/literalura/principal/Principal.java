@@ -2,6 +2,7 @@ package com.alura.literalura.principal;
 
 import com.alura.literalura.model.DadosGutendex;
 import com.alura.literalura.model.DadosLivro;
+import com.alura.literalura.model.Livro;
 import com.alura.literalura.service.AutorService;
 import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConverterDados;
@@ -9,6 +10,7 @@ import com.alura.literalura.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -39,8 +41,9 @@ public class Principal {
                     3- listar autores registrados
                     4- listar autores vivos em um determinado ano
                     5- listar livros em um determinado idioma
-                    6 - buscar autor pelo nome
-                    7 - Top 10 livros mais baixados
+                    6- buscar autor pelo nome
+                    7- Top 10 livros mais baixados
+                    8- Gerar estatísticas
                     0- sair                                 
                     ----------------------------
                     """;
@@ -55,13 +58,29 @@ public class Principal {
                 case 3 -> listarAutoresRegistrados();
                 case 4 -> listarAutoresVivosEmUmDeterminadoAno();
                 case 5 -> listarLivrosEmUmDeterminadoIdioma();
-                case 0 -> System.out.println("Saindo...");
                 case 6 -> buscarAutorPeloNome();
                 case 7 -> listarLivrosMaisBaixados();
+                case 8 -> gerarEstatisticas();
+                case 0 -> System.out.println("Saindo...");
                 default -> System.out.println("Opção inválida");
             }
         }
 
+    }
+
+    private void gerarEstatisticas() {
+        List<Livro> livros = livroService.buscarTodosLivros();
+
+        DoubleSummaryStatistics statistics = livros.stream()
+                .mapToDouble(Livro::getDownloads)
+                .summaryStatistics();
+
+        System.out.println("Estatísticas dos downloads dos livros:");
+        System.out.println("Média: " + statistics.getAverage());
+        System.out.println("Máximo: " + statistics.getMax());
+        System.out.println("Mínimo: " + statistics.getMin());
+        System.out.println("Soma: " + statistics.getSum());
+        System.out.println("Quantidade: " + statistics.getCount());
     }
 
     private void listarLivrosMaisBaixados() {
