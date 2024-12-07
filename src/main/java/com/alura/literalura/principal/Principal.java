@@ -64,6 +64,17 @@ public class Principal {
     }
 
     private void listarAutoresVivosEmUmDeterminadoAno() {
+        System.out.println("Digite o ano que deseja buscar: ");
+        int ano = scanner.nextInt();
+        scanner.nextLine();
+
+        List<String> autoresVivos = autorService.listarAutoresVivosEmUmDeterminadoAno(ano);
+
+        if (autoresVivos.isEmpty()) {
+            System.out.println("Nenhum autor vivo encontrado");
+        } else {
+            autoresVivos.forEach(System.out::println);
+        }
     }
 
     private void listarAutoresRegistrados() {

@@ -32,4 +32,22 @@ public class AutorService {
                             "Livros: [" + livros + "]\n";
                 }).collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<String> listarAutoresVivosEmUmDeterminadoAno(int ano) {
+        List<Autor> autores = autorRepository.findAll();
+
+        return autores.stream()
+                .filter(autor -> autor.getAnoFalecimento() == null || ( autor.getAnoFalecimento() > ano && autor.getAnoNascimento() <= ano))
+                .map( autor -> {
+                    String livros = autor.getLivros().stream()
+                            .map(Livro::getTitulo)
+                            .collect(Collectors.joining(", "));
+
+                    return "Autor: " + autor.getNome() + "\n" +
+                            "Ano de nascimento: " + autor.getAnoNascimento() + "\n" +
+                            "Ano de falecimento: " + (autor.getAnoFalecimento() != null ? autor.getAnoFalecimento() : "N/A") + "\n" +
+                            "Livros: [" + livros + "]\n";
+                }).collect(Collectors.toList());
+    }
 }
