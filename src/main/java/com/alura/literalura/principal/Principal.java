@@ -2,6 +2,7 @@ package com.alura.literalura.principal;
 
 import com.alura.literalura.model.DadosGutendex;
 import com.alura.literalura.model.DadosLivro;
+import com.alura.literalura.service.AutorService;
 import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConverterDados;
 import com.alura.literalura.service.LivroService;
@@ -19,6 +20,9 @@ public class Principal {
 
     @Autowired
     private LivroService livroService;
+
+    @Autowired
+    private AutorService autorService;
 
     private final String ENDERECO = "https://gutendex.com/books/?search=";
 
@@ -63,6 +67,13 @@ public class Principal {
     }
 
     private void listarAutoresRegistrados() {
+        List<String> autoresRegistrados = autorService.listarAutores();
+
+        if (autoresRegistrados.isEmpty()) {
+            System.out.println("Nenhum autor cadastrado");
+        } else {
+            autoresRegistrados.forEach(System.out::println);
+        }
     }
 
     private void listarLivrosRegistrados() {
