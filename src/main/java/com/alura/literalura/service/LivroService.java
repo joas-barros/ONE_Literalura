@@ -77,7 +77,20 @@ public class LivroService {
     }
 
     @Transactional(readOnly = true)
-    public List<Livro> listarLivrosPorIdioma(String idioma) {
-        return livroRepository.findByIdioma(idioma);
+    public List<String> listarLivrosPorIdioma(String idioma) {
+        List<Livro> livros = livroRepository.listarLivrosPorIdioma(idioma);
+
+        return livros.stream().map(livro -> {
+            String autores = livro.getAutores().stream()
+                    .map(Autor::getNome)
+                    .collect(Collectors.joining(", "));
+
+            return "-------------- Livro ----------------\n" +
+                    "Título: " + livro.getTitulo() + "\n" +
+                    "Autores: " + autores + "\n" +
+                    "Idioma: " + livro.getIdioma() + "\n" +
+                    "Número de Downloads: " + livro.getDownloads() + "\n" +
+                    "--------------------------------------";
+        }).collect(Collectors.toList());
     }
 }

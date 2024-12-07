@@ -2,6 +2,7 @@ package com.alura.literalura.principal;
 
 import com.alura.literalura.model.DadosGutendex;
 import com.alura.literalura.model.DadosLivro;
+import com.alura.literalura.model.Livro;
 import com.alura.literalura.service.AutorService;
 import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConverterDados;
@@ -60,6 +61,25 @@ public class Principal {
     }
 
     private void listarLivrosEmUmDeterminadoIdioma() {
+
+        System.out.println("Escolha o idioma que deseja buscar: ");
+        System.out.println("""
+                es - espanhol
+                en - inglês
+                fr - francês
+                pt - português
+                de - alemão
+                """);
+
+        String idioma = scanner.nextLine();
+
+        List<String> livrosPorIdioma = livroService.listarLivrosPorIdioma(idioma);
+
+        if (livrosPorIdioma.isEmpty()) {
+            System.out.println("Nenhum livro encontrado");
+        } else {
+            livrosPorIdioma.forEach(System.out::println);
+        }
 
     }
 
